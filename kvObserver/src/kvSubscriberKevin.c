@@ -12,20 +12,21 @@
 
 void kvSubscriberNotify();
 
-void kvSubscriberInit(Subscriber_t **newSub,void *registerEditorial)
+void kvSubscriberInit(Subscriber_t **newSub,void *registerEditorial,TypePaperSub_t type)
 {
   Editorial_t *thisEditorial = (Editorial_t *)registerEditorial;
 
   *newSub = (Subscriber_t*) malloc(sizeof (Subscriber_t));
   (*newSub)->notify = kvSubscriberNotify;
-  (*newSub)->subType = DAILY_PAPER;
-
+  (*newSub)->subType = type;
   thisEditorial->registerNewSubscriber(*newSub);
 
 }
 
 
-void kvSubscriberNotify()
+void kvSubscriberNotify(void *TypePaper)
 {
-  printf("\r\n I am Kevin, My subscribe is Daily paper");
+  UInt8 *paperRec = (UInt8*) TypePaper;
+
+  printf("\r\n I am Kevin, My subscribe is %s",paperRec);
 }

@@ -12,6 +12,7 @@
 
 int main()
 {
+
   ThisEditorial_t thisEditorial;
   Subscriber_t *kevin = NULL;
   Subscriber_t *Linda = NULL;
@@ -20,16 +21,16 @@ int main()
 
   thisEditorial.init();
 
-  kvSubscriberInit(&kevin,thisEditorial.editorial);
-  kvSubscriberInit(&Linda,thisEditorial.editorial);
+  kvSubscriberInit(&kevin,thisEditorial.editorial,DAILY_PAPER);
+  kvSubscriberInit(&Linda,thisEditorial.editorial,WEEK_PAPER);
 
   thisEditorial.editorial->deliverNewSpaper(NULL);
 
   thisEditorial.editorial->removeSubscriber(kevin);
+  thisEditorial.editorial->removeSubscriber(Linda);
+
 
   thisEditorial.editorial->deliverNewSpaper(NULL);
 
-
   return 1;
-
 }

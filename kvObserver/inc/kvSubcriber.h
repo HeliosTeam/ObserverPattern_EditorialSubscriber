@@ -28,6 +28,6 @@ typedef struct Subcriber_st
 }Subscriber_t;
 
 
-void kvSubscriberInit(Subscriber_t **newSub,void *registerEditorial);
+void kvSubscriberInit(Subscriber_t **newSub,void *registerEditorial,TypePaperSub_t type);
 
 #endif /* EDITORIALSUBCRIBER_KVOBSERVER_INC_KVSUBCRIBER_H_ */

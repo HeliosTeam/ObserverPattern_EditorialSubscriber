@@ -112,11 +112,6 @@ ErrorCode_t subListRemoveElementBasedIndex(SubscriberList_t **list,UInt32 index)
   SubscriberList_t *tempSub = (SubscriberList_t*) NULL;
 
   lengthOfSubList -=1;
-  if(!index)
-  {
-    errCode = ERROR_BAD_PARAMETER;
-    return errCode ;
-  }
 
   while (index--)
   {
@@ -220,11 +215,24 @@ void kvEditorialRemoveSubscriber(Subscriber_t *removeSubscriber)
 void kvEditorialDeliveryNewMagazing(void *object)
 {
   SubscriberList_t *current = subList;
+  UInt8 *typeNewspaper;
 
   while(current->nextSub != NULL)
   {
-    current->sub->notify(NULL);
-    current = current->nextSub;
+    switch (current->sub->subType)
+    {
+      case DAILY_PAPER:
+        typeNewspaper = "DAILY NEWSPAPER";
+        break;
+      case WEEK_PAPER:
+        typeNewspaper = "WEEKLY NEWSPAPER";
+        break;
+      default:
+        typeNewspaper = "DAILY NEWSPAPER";
+        break;
+    }
+      current->sub->notify(typeNewspaper);
+      current = current->nextSub;
   }
 }
 
