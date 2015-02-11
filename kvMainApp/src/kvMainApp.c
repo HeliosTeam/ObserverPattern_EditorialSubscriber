@@ -10,7 +10,26 @@
 #include "../../kvObserver/inc/kvEditorial.h"
 #include "../../kvObserver/inc/kvSubcriber.h"
 
-void main()
+int main()
 {
+  ThisEditorial_t thisEditorial;
+  Subscriber_t *kevin = NULL;
+  Subscriber_t *Linda = NULL;
+
+  kvEditorialRegisterInterface(&thisEditorial);
+
+  thisEditorial.init();
+
+  kvSubscriberInit(&kevin,thisEditorial.editorial);
+  kvSubscriberInit(&Linda,thisEditorial.editorial);
+
+  thisEditorial.editorial->deliverNewSpaper(NULL);
+
+  thisEditorial.editorial->removeSubscriber(kevin);
+
+  thisEditorial.editorial->deliverNewSpaper(NULL);
+
+
+  return 1;
 
 }

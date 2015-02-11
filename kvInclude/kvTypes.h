@@ -8,7 +8,7 @@
 #ifndef EDITORIALSUBCRIBER_KVINCLUDE_KVTYPES_H_
 #define EDITORIALSUBCRIBER_KVINCLUDE_KVTYPES_H_
 
-#define NULL 0
+#define NULL    ((void *)0)
 
 typedef void Void;
 typedef char Int8;

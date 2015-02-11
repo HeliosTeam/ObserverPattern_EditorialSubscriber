@@ -9,28 +9,36 @@
 #define EDITORIALSUBCRIBER_KVOBSERVER_INC_KVEDITORIAL_H_
 
 #include "../../kvInclude/kvInclude.h"
+#include "../inc/kvSubcriber.h"
 
 typedef struct subscriberList_st
 {
     Subscriber_t *sub;
-    SubscriberList_t *nextSub;
+    struct subscriberList_st *nextSub;
 }SubscriberList_t;
 
-typedef Void (*RegisterNewSubscriber)(Void *);
-typedef Void (*RemoveSubscriber)(Void *);
-typedef Void (*DeliverNewSpaper)(Void *);
-typedef Void *(*GetReferenceOfInstance)(Void*);
+
+typedef ErrorCode_t (*Init)(void);
+typedef void (*RegisterNewSubscriber)(void *);
+typedef void (*RemoveSubscriber)(void *);
+typedef void (*DeliverNewSpaper)(void *);
+typedef void *(*GetReferenceOfInstance)(void*);
 
 
-typedef struct editorial_st
+typedef struct Editorial_st
 {
     RegisterNewSubscriber registerNewSubscriber;
     RemoveSubscriber removeSubscriber;
     DeliverNewSpaper deliverNewSpaper;
-    GetReferenceOfInstance getInstanceRef;
 }Editorial_t;
 
+typedef struct ThisEditorial_st
+{
+    Init init;
+    GetReferenceOfInstance getInstanceRef;
+    Editorial_t *editorial;
+}ThisEditorial_t;
 
-Void *kvGetThisEditorial();
+ErrorCode_t kvEditorialRegisterInterface(ThisEditorial_t *thisEditorial);
 
 #endif /* EDITORIALSUBCRIBER_KVOBSERVER_INC_KVEDITORIAL_H_ */

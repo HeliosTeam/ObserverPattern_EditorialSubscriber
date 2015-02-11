@@ -9,6 +9,8 @@
 #define EDITORIALSUBCRIBER_KVOBSERVER_INC_KVSUBCRIBER_H_
 
 #include "../../kvInclude/kvInclude.h"
+#include "../inc/kvEditorial.h"
+
 typedef enum TypePaperSub_st
 {
   DAILY_PAPER,
@@ -25,5 +27,7 @@ typedef struct Subcriber_st
     Notify notify;
 }Subscriber_t;
 
+
+void kvSubscriberInit(Subscriber_t **newSub,void *registerEditorial);
 
 #endif /* EDITORIALSUBCRIBER_KVOBSERVER_INC_KVSUBCRIBER_H_ */

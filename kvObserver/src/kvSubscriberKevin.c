@@ -5,27 +5,27 @@
  *      Author: KEVIN
  */
 
-
+#include <stdlib.h>
 #include "../inc/kvEditorial.h"
 #include "../inc/kvSubcriber.h"
 
-Subscriber_t *subscriberKevin;
 
-void kvSubscriberInit()
+void kvSubscriberNotify();
+
+void kvSubscriberInit(Subscriber_t **newSub,void *registerEditorial)
 {
-  subscriberKevin = malloc(sizeof (Subscriber_t));
-  subscriberKevin->notify = kvSubscriberNotify;
-  subscriberKevin->subType = DAILY_PAPER;
+  Editorial_t *thisEditorial = (Editorial_t *)registerEditorial;
 
-  Editorial_t *myEditorial = (Editorial_t *) kvGetThisEditorial();
+  *newSub = (Subscriber_t*) malloc(sizeof (Subscriber_t));
+  (*newSub)->notify = kvSubscriberNotify;
+  (*newSub)->subType = DAILY_PAPER;
 
-  myEditorial->registerNewSubscriber(subscriberKevin);
-
+  thisEditorial->registerNewSubscriber(*newSub);
 
 }
 
 
-Void kvSubscriberNotify()
+void kvSubscriberNotify()
 {
   printf("\r\n I am Kevin, My subscribe is Daily paper");
 }
