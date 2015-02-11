@@ -14,23 +14,23 @@ int main()
 {
 
   ThisEditorial_t thisEditorial;
-  Subscriber_t *kevin = NULL;
+  Subscriber_t *Kevin = NULL;
   Subscriber_t *Linda = NULL;
+  Subscriber_t *Jean = NULL;
+  Subscriber_t *Petter = NULL;
 
   kvEditorialRegisterInterface(&thisEditorial);
 
   thisEditorial.init();
 
-  kvSubscriberInit(&kevin,thisEditorial.editorial,DAILY_PAPER);
+  kvSubscriberInit(&Kevin,thisEditorial.editorial,DAILY_PAPER);
   kvSubscriberInit(&Linda,thisEditorial.editorial,WEEK_PAPER);
+  kvSubscriberInit(&Jean,thisEditorial.editorial,MONTH_PAPER);
+  kvSubscriberInit(&Petter,thisEditorial.editorial,YEAR_PAPER);
 
   thisEditorial.editorial->deliverNewSpaper(NULL);
 
-  thisEditorial.editorial->removeSubscriber(kevin);
-  thisEditorial.editorial->removeSubscriber(Linda);
 
-
-  thisEditorial.editorial->deliverNewSpaper(NULL);
 
   return 1;
 }

@@ -6,13 +6,14 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "../inc/kvEditorial.h"
 #include "../inc/kvSubcriber.h"
 
 
-void kvSubscriberNotify();
+Void kvSubscriberNotify();
 
-void kvSubscriberInit(Subscriber_t **newSub,void *registerEditorial,TypePaperSub_t type)
+Void kvSubscriberInit(Subscriber_t **newSub,Void *registerEditorial,TypePaperSub_t type)
 {
   Editorial_t *thisEditorial = (Editorial_t *)registerEditorial;
 
@@ -24,9 +25,8 @@ void kvSubscriberInit(Subscriber_t **newSub,void *registerEditorial,TypePaperSub
 }
 
 
-void kvSubscriberNotify(void *TypePaper)
+Void kvSubscriberNotify(Void *TypePaper)
 {
   UInt8 *paperRec = (UInt8*) TypePaper;
-
   printf("\r\n I am Kevin, My subscribe is %s",paperRec);
 }

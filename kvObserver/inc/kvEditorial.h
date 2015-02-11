@@ -18,11 +18,11 @@ typedef struct subscriberList_st
 }SubscriberList_t;
 
 
-typedef ErrorCode_t (*Init)(void);
-typedef void (*RegisterNewSubscriber)(void *);
-typedef void (*RemoveSubscriber)(void *);
-typedef void (*DeliverNewSpaper)(void *);
-typedef void *(*GetReferenceOfInstance)(void*);
+typedef ErrorCode_t (*Init)(Void);
+typedef Void (*RegisterNewSubscriber)(Void *);
+typedef Void (*RemoveSubscriber)(Void *);
+typedef Void (*DeliverNewSpaper)(Void *);
+typedef Void *(*GetReferenceOfInstance)(Void*);
 
 
 typedef struct Editorial_st
@@ -35,8 +35,8 @@ typedef struct Editorial_st
 typedef struct ThisEditorial_st
 {
     Init init;
-    GetReferenceOfInstance getInstanceRef;
     Editorial_t *editorial;
+    struct subscriberList_st *subList;
 }ThisEditorial_t;
 
 ErrorCode_t kvEditorialRegisterInterface(ThisEditorial_t *thisEditorial);
