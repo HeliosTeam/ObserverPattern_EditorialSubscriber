@@ -1,0 +1,4 @@
+THis is a demo for Observer pattern in C 
+
+Editorial is Subject 
+Subscriber is object and is an Observer of Subject
