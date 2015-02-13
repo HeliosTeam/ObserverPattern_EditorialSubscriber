@@ -11,28 +11,45 @@
 #include "../../kvObserver/inc/kvEditorial.h"
 #include "../../kvObserver/inc/kvSubcriber.h"
 
-int main()
-{
+int main() {
 
-  ThisEditorial_t *thisEditorial = NULL;
-  Subscriber_t *Kevin = NULL;
-  Subscriber_t *Linda = NULL;
-  Subscriber_t *Jean = NULL;
-  Subscriber_t *Petter = NULL;
+	Int8 c;
+	ThisEditorial_t *thisEditorial = NULL;
+	Subscriber_t *Kevin = NULL;
+	Subscriber_t *Linda = NULL;
+	Subscriber_t *Jean = NULL;
+	Subscriber_t *Petter = NULL;
 
-  thisEditorial = (ThisEditorial_t *) malloc(sizeof(ThisEditorial_t));
-  kvEditorialRegisterInterface(thisEditorial);
+	thisEditorial = (ThisEditorial_t *) malloc(sizeof(ThisEditorial_t));
+	kvEditorialRegisterInterface(thisEditorial);
 
-  thisEditorial->init(thisEditorial);
+	thisEditorial->init(thisEditorial);
 
-  kvSubscriberInit(&Kevin,thisEditorial->editorial,DAILY_PAPER);
-  kvSubscriberInit(&Linda,thisEditorial->editorial,WEEK_PAPER);
-  kvSubscriberInit(&Jean,thisEditorial->editorial,MONTH_PAPER);
-  kvSubscriberInit(&Petter,thisEditorial->editorial,YEAR_PAPER);
+	kvSubscriberInit(&Kevin, thisEditorial->editorial, DAILY_PAPER);
+	kvSubscriberInit(&Linda, thisEditorial->editorial, WEEK_PAPER);
+	kvSubscriberInit(&Jean, thisEditorial->editorial, MONTH_PAPER);
 
-  thisEditorial->editorial->deliverNewSpaper(NULL);
+	Kevin->setFlag(Kevin);
+	Linda->setFlag(Linda);
+	Jean->setFlag(Jean);
 
+//  kvSubscriberInit(&Petter,thisEditorial->editorial,YEAR_PAPER);
 
+	while (1) {
+		thisEditorial->editorial->deliverNewSpaper(NULL);
+		printf("\r\nPress Any Key to Continue\n");
+		c = getchar();
+		if (c == 'n') {
+			Kevin->setFlag(Kevin);
+			Linda->setFlag(Linda);
+			Jean->setFlag(Jean);
+		}
 
-  return 1;
+		if (c == 't') {
+			Kevin->setFlag(Kevin);
+			Linda->setFlag(Linda);
+		}
+
+	}
+	return 1;
 }

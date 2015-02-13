@@ -11,7 +11,7 @@
 #include "../../kvInclude/kvInclude.h"
 #include "../inc/kvEditorial.h"
 
-typedef enum TypePaperSub_st
+typedef enum TypePaperSub_en
 {
   DAILY_PAPER,
   WEEK_PAPER,
@@ -19,15 +19,27 @@ typedef enum TypePaperSub_st
   YEAR_PAPER,
 }TypePaperSub_t;
 
-typedef void (*Notify) (void *);
+typedef enum ChangedFlag_en
+{
+	SET,
+	RESET,
+}ChangedFlag_t;
+
+typedef Void (*Notify) (Void *);
+
+typedef Void (*ResetChangedFlash)(Void *);
+typedef Void (*SetChangedFlash)(Void *);
 
 typedef struct Subcriber_st
 {
+	ChangedFlag_t change;
+	ResetChangedFlash resetFlag;
+	SetChangedFlash setFlag;
     TypePaperSub_t subType;
     Notify notify;
-}Subscriber_t;
+} Subscriber_t;
 
 
-void kvSubscriberInit(Subscriber_t **newSub,void *registerEditorial,TypePaperSub_t type);
+Void kvSubscriberInit(Subscriber_t **newSub,Void *registerEditorial,TypePaperSub_t type);
 
 #endif /* EDITORIALSUBCRIBER_KVOBSERVER_INC_KVSUBCRIBER_H_ */

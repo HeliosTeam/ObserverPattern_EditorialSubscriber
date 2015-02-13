@@ -229,26 +229,30 @@ Void kvEditorialDeliveryNewMagazing(Void *object)
 
   do
   {
-    switch (current->sub->subType)
-    {
-      case DAILY_PAPER:
-        typeNewspaper = "DAILY NEWSPAPER";
-        break;
-      case WEEK_PAPER:
-        typeNewspaper = "WEEKLY NEWSPAPER";
-        break;
-      case MONTH_PAPER:
-        typeNewspaper = "MONTHLY NEWSPAPER";
-        break;
-      case YEAR_PAPER:
-        typeNewspaper = "YEARLY NEWSPAPER";
-        break;
-      default:
-        typeNewspaper = "DAILY NEWSPAPER";
-        break;
-    }
-      current->sub->notify(typeNewspaper);
-      current = current->nextSub;
+	if (current->sub->change == SET)
+	{
+		switch (current->sub->subType)
+		{
+		  case DAILY_PAPER:
+			typeNewspaper = "DAILY NEWSPAPER";
+			break;
+		  case WEEK_PAPER:
+			typeNewspaper = "WEEKLY NEWSPAPER";
+			break;
+		  case MONTH_PAPER:
+			typeNewspaper = "MONTHLY NEWSPAPER";
+			break;
+		  case YEAR_PAPER:
+			typeNewspaper = "YEARLY NEWSPAPER";
+			break;
+		  default:
+			typeNewspaper = "DAILY NEWSPAPER";
+			break;
+		}
+		current->sub->notify(typeNewspaper);
+		current->sub->resetFlag(current->sub);
+	}
+    current = current->nextSub;
   }while(current != NULL);
 }
 
