@@ -18,7 +18,7 @@ typedef struct subscriberList_st
 }SubscriberList_t;
 
 
-typedef ErrorCode_t (*Init)(Void);
+typedef ErrorCode_t (*Init)(Void *);
 typedef Void (*RegisterNewSubscriber)(Void *);
 typedef Void (*RemoveSubscriber)(Void *);
 typedef Void (*DeliverNewSpaper)(Void *);

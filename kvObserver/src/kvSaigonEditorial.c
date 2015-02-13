@@ -75,7 +75,7 @@ Void kvEditorialAddNewSubscrible(Void *newSubcriber);
 Void kvEditorialRemoveSubscriber(Void *removeSubscriber);
 Void kvEditorialDeliveryNewMagazing(Void *object);
 
-Void subListAddElementToLast(SubscriberList_t *headList,Subscriber_t *sub)
+Void subListAddElementAtLast(SubscriberList_t *headList,Subscriber_t *sub)
 {
 
   SubscriberList_t *current;
@@ -88,9 +88,16 @@ Void subListAddElementToLast(SubscriberList_t *headList,Subscriber_t *sub)
     current = current->nextSub;
   }
 
-  current->nextSub = malloc(sizeof(SubscriberList_t));
-  current->nextSub->sub = sub;
-  current->nextSub->nextSub = NULL;
+  if (current->sub == NULL)
+  {
+	  current->sub = sub;
+  }
+  else
+  {
+	  current->nextSub = malloc(sizeof(SubscriberList_t));
+	  current->nextSub->sub = sub;
+	  current->nextSub->nextSub = NULL;
+  }
 }
 
 Void subListAddElementAtFirst(SubscriberList_t **subList, Subscriber_t *sub)
@@ -183,6 +190,7 @@ ErrorCode_t kvEditorialInit(Void *thisEditorial)
   this->subList =  malloc(sizeof(SubscriberList_t));
 
   subList = this->subList;
+  subList->sub = NULL;
 
   if (subList == NULL)
   {
@@ -201,7 +209,7 @@ ErrorCode_t kvEditorialInit(Void *thisEditorial)
 
 Void kvEditorialAddNewSubscrible(Void *newSubcriber)
 {
-  subListAddElementToLast(subList,(Subscriber_t*)newSubcriber);
+  subListAddElementAtLast(subList,(Subscriber_t*)newSubcriber);
 }
 
 Void kvEditorialRemoveSubscriber(Void *removeSubscriber)
@@ -219,7 +227,7 @@ Void kvEditorialDeliveryNewMagazing(Void *object)
   SubscriberList_t *current = subList;
   Int8 *typeNewspaper;
 
-  while(current->nextSub != NULL)
+  do
   {
     switch (current->sub->subType)
     {
@@ -241,6 +249,6 @@ Void kvEditorialDeliveryNewMagazing(Void *object)
     }
       current->sub->notify(typeNewspaper);
       current = current->nextSub;
-  }
+  }while(current != NULL);
 }
 
