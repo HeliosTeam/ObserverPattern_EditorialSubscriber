@@ -70,10 +70,10 @@ UInt32 subListIndexof(ModuleList_t *list,Module_t *sub);
  *============================================================================*/
 UInt32 subListLength(ModuleList_t *list);
 
-ErrorCode_t kvEditorialInit();
+ErrorCode_t kvHostInit();
 Void kvEditorialAddNewSubscrible(Void *newSubcriber);
 Void kvEditorialRemoveSubscriber(Void *removeSubscriber);
-Void kvEditorialDeliveryNewMagazing(Void *object);
+Void kvHostUpdateProcess(Void *object);
 
 Void subListAddElementAtLast(ModuleList_t *headList,Module_t *sub)
 {
@@ -83,20 +83,20 @@ Void subListAddElementAtLast(ModuleList_t *headList,Module_t *sub)
   current = headList;
   lengthOfSubList += 1;
 
-  while(current->nextSub != NULL)
+  while(current->nextModule != NULL)
   {
-    current = current->nextSub;
+    current = current->nextModule;
   }
 
-  if (current->sub == NULL)
+  if (current->curModule == NULL)
   {
-	  current->sub = sub;
+	  current->curModule = sub;
   }
   else
   {
-	  current->nextSub = malloc(sizeof(ModuleList_t));
-	  current->nextSub->sub = sub;
-	  current->nextSub->nextSub = NULL;
+	  current->nextModule = malloc(sizeof(ModuleList_t));
+	  current->nextModule->curModule = sub;
+	  current->nextModule->nextModule = NULL;
   }
 }
 
@@ -104,8 +104,8 @@ Void subListAddElementAtFirst(ModuleList_t **subList, Module_t *sub)
 {
   ModuleList_t *newSub;
   newSub = (ModuleList_t *)malloc(sizeof(ModuleList_t));
-  newSub->sub = sub;
-  newSub->nextSub = *subList;
+  newSub->curModule = sub;
+  newSub->nextModule = *subList;
   *subList = newSub;
 }
 
@@ -119,16 +119,16 @@ ErrorCode_t subListRemoveElementBasedIndex(ModuleList_t **list,UInt32 index)
 
   while (index--)
   {
-    if (currentSub->nextSub==NULL)
+    if (currentSub->nextModule==NULL)
     {
       errCode = ERROR_BAD_PARAMETER;
       return errCode;
     }
-    currentSub = currentSub->nextSub;
+    currentSub = currentSub->nextModule;
   }
 
-  tempSub = currentSub->nextSub;
-  currentSub->nextSub =  tempSub->nextSub;
+  tempSub = currentSub->nextModule;
+  currentSub->nextModule =  tempSub->nextModule;
   free(tempSub);
 
   return errCode;
@@ -139,9 +139,9 @@ UInt32 subListIndexof(ModuleList_t *listHead,Module_t *sub)
   UInt32 index = 0;
   ModuleList_t *currentSub = listHead;
 
-  while (sub != currentSub->sub) // If address of sub is equal with a address of subscriber
+  while (sub != currentSub->curModule) // If address of sub is equal with a address of subscriber
   {
-    currentSub = currentSub->nextSub;
+    currentSub = currentSub->nextModule;
     index ++;
   }
 
@@ -153,7 +153,7 @@ UInt32 subListLength(ModuleList_t *head)
   ModuleList_t *current = head;
   UInt32 count = 0;
 
-  while (current ->nextSub != NULL)
+  while (current ->nextModule != NULL)
   {
     count++;
   }
@@ -166,7 +166,7 @@ ErrorCode_t kvHostRegisterInterface(ThistHost_t *thistHost)
 {
   ErrorCode_t errCode = ERROR_NONE;
 
-  thistHost->init = kvEditorialInit;
+  thistHost->init = kvHostInit;
   thistHost->host = malloc(sizeof (Host_t));
 
   if(thistHost->host == NULL)
@@ -179,7 +179,7 @@ ErrorCode_t kvHostRegisterInterface(ThistHost_t *thistHost)
 }
 
 
-ErrorCode_t kvEditorialInit(Void *thisEditorial)
+ErrorCode_t kvHostInit(Void *thisEditorial)
 {
   ErrorCode_t errCode = ERROR_NONE;
 
@@ -187,10 +187,10 @@ ErrorCode_t kvEditorialInit(Void *thisEditorial)
 
   Host_t *editorialInf = this->host;
 
-  this->subList =  malloc(sizeof(ModuleList_t));
+  this->moduleList =  malloc(sizeof(ModuleList_t));
 
-  subList = this->subList;
-  subList->sub = NULL;
+  subList = this->moduleList;
+  subList->curModule = NULL;
 
   if (subList == NULL)
   {
@@ -198,11 +198,11 @@ ErrorCode_t kvEditorialInit(Void *thisEditorial)
         return errCode;
   }
 
-  subList->nextSub = NULL;
+  subList->nextModule = NULL;
 
   editorialInf->registeNewModule = kvEditorialAddNewSubscrible;
   editorialInf->removeModule = kvEditorialRemoveSubscriber;
-  editorialInf->update = kvEditorialDeliveryNewMagazing;
+  editorialInf->update = kvHostUpdateProcess;
 
   return errCode;
 }
@@ -222,16 +222,16 @@ Void kvEditorialRemoveSubscriber(Void *removeSubscriber)
 }
 
 
-Void kvEditorialDeliveryNewMagazing(Void *object)
+Void kvHostUpdateProcess(Void *object)
 {
   ModuleList_t *current = subList;
   Int8 *typeNewspaper;
 
   do
   {
-	if (current->sub->change == UPDATE_SET)
+	if (current->curModule->change == UPDATE_SET)
 	{
-		switch (current->sub->subType)
+		switch (current->curModule->subType)
 		{
 		  case DAILY_PAPER:
 			typeNewspaper = "DAILY NEWSPAPER";
@@ -249,10 +249,10 @@ Void kvEditorialDeliveryNewMagazing(Void *object)
 			typeNewspaper = "DAILY NEWSPAPER";
 			break;
 		}
-		current->sub->update(typeNewspaper);
-		kvModuleResetCHangedFlag(current->sub);
+		current->curModule->moduleUpdate(typeNewspaper);
+		kvModuleResetCHangedFlag(current->curModule);
 	}
-    current = current->nextSub;
+    current = current->nextModule;
   }while(current != NULL);
 }
 

@@ -26,7 +26,7 @@ Void *kvModuleProximityRegisterInterface(Module_t **newModule)
 		thisProximity->proximity.init = kvModuleProximityInit;
 		thisProximity->proximity.change = UPDATE_RESET;
 		thisProximity->proximity.subType = DAILY_PAPER;
-		thisProximity->proximity.update = kvModuleProximityProcess;
+		thisProximity->proximity.moduleUpdate = kvModuleProximityProcess;
 	}
 	return thisProximity;
 }

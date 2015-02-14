@@ -13,8 +13,8 @@
 
 typedef struct ModuleList_st
 {
-	struct Module_st *sub;
-    struct ModuleList_st *nextSub;
+	struct Module_st *curModule;
+    struct ModuleList_st *nextModule;
 }ModuleList_t;
 
 
@@ -36,7 +36,7 @@ typedef struct ThisHost_st
 {
     HostInit init;
     Host_t *host;
-    struct ModuleList_st *subList;
+    struct ModuleList_st *moduleList;
 }ThistHost_t;
 
 ErrorCode_t kvHostRegisterInterface(ThistHost_t *thisHost);

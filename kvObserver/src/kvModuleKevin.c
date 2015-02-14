@@ -20,7 +20,7 @@ Void kvModuleInit(Module_t **newModule,Void *registerHost,TypePaperSub_t type)
   Host_t *thisEditorial = (Host_t *)registerHost;
 
   *newModule = (Module_t*) malloc(sizeof (Module_t));
-  (*newModule)->update = kvSubscriberNotify;
+  (*newModule)->moduleUpdate = kvSubscriberNotify;
   (*newModule)->subType = type;
   (*newModule)->change = UPDATE_RESET;
   thisEditorial->registeNewModule(*newModule);

@@ -39,7 +39,7 @@ typedef struct Module_st
 	ModuleInit init;
 	UpdateFlag_t change;
     TypePaperSub_t subType;
-    UpdateProcess update;
+    UpdateProcess moduleUpdate;
 } Module_t;
 
 Void kvModuleRegisterInterface(Module_t *Module);
