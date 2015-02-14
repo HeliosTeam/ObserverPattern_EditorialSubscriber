@@ -5,10 +5,10 @@
  *      Author: KEVIN
  */
 #include <stdlib.h>
-#include "../inc/kvEditorial.h"
-#include "../inc/kvSubcriber.h"
+#include "../inc/kvHost.h"
+#include "../inc/kvModule.h"
 
-SubscriberList_t *subList;
+ModuleList_t *subList;
 static UInt32 lengthOfSubList;
 
 /*==============================================================================
@@ -24,7 +24,7 @@ static UInt32 lengthOfSubList;
  *
  * @END
  *============================================================================*/
-Void subListAddElementAtFirst(SubscriberList_t **subList, Subscriber_t *sub);
+Void subListAddElementAtFirst(ModuleList_t **subList, Module_t *sub);
 /*==============================================================================
  * @START
  * Function: subListRemoveElement
@@ -38,7 +38,7 @@ Void subListAddElementAtFirst(SubscriberList_t **subList, Subscriber_t *sub);
  *
  * @END
  *============================================================================*/
-ErrorCode_t subListRemoveElementBasedIndex(SubscriberList_t **list,UInt32 index);
+ErrorCode_t subListRemoveElementBasedIndex(ModuleList_t **list,UInt32 index);
 /*==============================================================================
  * @START
  * Function: subListIndexof
@@ -53,7 +53,7 @@ ErrorCode_t subListRemoveElementBasedIndex(SubscriberList_t **list,UInt32 index)
  *
  * @END
  *============================================================================*/
-UInt32 subListIndexof(SubscriberList_t *list,Subscriber_t *sub);
+UInt32 subListIndexof(ModuleList_t *list,Module_t *sub);
 /*==============================================================================
  * @START
  * Function: subListLength
@@ -68,17 +68,17 @@ UInt32 subListIndexof(SubscriberList_t *list,Subscriber_t *sub);
  *
  * @END
  *============================================================================*/
-UInt32 subListLength(SubscriberList_t *list);
+UInt32 subListLength(ModuleList_t *list);
 
 ErrorCode_t kvEditorialInit();
 Void kvEditorialAddNewSubscrible(Void *newSubcriber);
 Void kvEditorialRemoveSubscriber(Void *removeSubscriber);
 Void kvEditorialDeliveryNewMagazing(Void *object);
 
-Void subListAddElementAtLast(SubscriberList_t *headList,Subscriber_t *sub)
+Void subListAddElementAtLast(ModuleList_t *headList,Module_t *sub)
 {
 
-  SubscriberList_t *current;
+  ModuleList_t *current;
 
   current = headList;
   lengthOfSubList += 1;
@@ -94,26 +94,26 @@ Void subListAddElementAtLast(SubscriberList_t *headList,Subscriber_t *sub)
   }
   else
   {
-	  current->nextSub = malloc(sizeof(SubscriberList_t));
+	  current->nextSub = malloc(sizeof(ModuleList_t));
 	  current->nextSub->sub = sub;
 	  current->nextSub->nextSub = NULL;
   }
 }
 
-Void subListAddElementAtFirst(SubscriberList_t **subList, Subscriber_t *sub)
+Void subListAddElementAtFirst(ModuleList_t **subList, Module_t *sub)
 {
-  SubscriberList_t *newSub;
-  newSub = (SubscriberList_t *)malloc(sizeof(SubscriberList_t));
+  ModuleList_t *newSub;
+  newSub = (ModuleList_t *)malloc(sizeof(ModuleList_t));
   newSub->sub = sub;
   newSub->nextSub = *subList;
   *subList = newSub;
 }
 
-ErrorCode_t subListRemoveElementBasedIndex(SubscriberList_t **list,UInt32 index)
+ErrorCode_t subListRemoveElementBasedIndex(ModuleList_t **list,UInt32 index)
 {
   ErrorCode_t errCode = ERROR_NONE;
-  SubscriberList_t *currentSub = *list;
-  SubscriberList_t *tempSub = (SubscriberList_t*) NULL;
+  ModuleList_t *currentSub = *list;
+  ModuleList_t *tempSub = (ModuleList_t*) NULL;
 
   lengthOfSubList -=1;
 
@@ -134,10 +134,10 @@ ErrorCode_t subListRemoveElementBasedIndex(SubscriberList_t **list,UInt32 index)
   return errCode;
 }
 
-UInt32 subListIndexof(SubscriberList_t *listHead,Subscriber_t *sub)
+UInt32 subListIndexof(ModuleList_t *listHead,Module_t *sub)
 {
   UInt32 index = 0;
-  SubscriberList_t *currentSub = listHead;
+  ModuleList_t *currentSub = listHead;
 
   while (sub != currentSub->sub) // If address of sub is equal with a address of subscriber
   {
@@ -148,9 +148,9 @@ UInt32 subListIndexof(SubscriberList_t *listHead,Subscriber_t *sub)
   return index;
 }
 
-UInt32 subListLength(SubscriberList_t *head)
+UInt32 subListLength(ModuleList_t *head)
 {
-  SubscriberList_t *current = head;
+  ModuleList_t *current = head;
   UInt32 count = 0;
 
   while (current ->nextSub != NULL)
@@ -162,14 +162,14 @@ UInt32 subListLength(SubscriberList_t *head)
 }
 
 
-ErrorCode_t kvEditorialRegisterInterface(ThisEditorial_t *thisEditorial)
+ErrorCode_t kvHostRegisterInterface(ThistHost_t *thistHost)
 {
   ErrorCode_t errCode = ERROR_NONE;
 
-  thisEditorial->init = kvEditorialInit;
-  thisEditorial->editorial = malloc(sizeof (Editorial_t));
+  thistHost->init = kvEditorialInit;
+  thistHost->host = malloc(sizeof (Host_t));
 
-  if(thisEditorial->editorial == NULL)
+  if(thistHost->host == NULL)
   {
     errCode = ERROR_BAD_ALLOCATE_MEM;
     return errCode;
@@ -183,11 +183,11 @@ ErrorCode_t kvEditorialInit(Void *thisEditorial)
 {
   ErrorCode_t errCode = ERROR_NONE;
 
-  ThisEditorial_t *this = (ThisEditorial_t *) thisEditorial;
+  ThistHost_t *this = (ThistHost_t *) thisEditorial;
 
-  Editorial_t *editorialInf = this->editorial;
+  Host_t *editorialInf = this->host;
 
-  this->subList =  malloc(sizeof(SubscriberList_t));
+  this->subList =  malloc(sizeof(ModuleList_t));
 
   subList = this->subList;
   subList->sub = NULL;
@@ -200,23 +200,23 @@ ErrorCode_t kvEditorialInit(Void *thisEditorial)
 
   subList->nextSub = NULL;
 
-  editorialInf->registerNewSubscriber = kvEditorialAddNewSubscrible;
-  editorialInf->removeSubscriber = kvEditorialRemoveSubscriber;
-  editorialInf->deliverNewSpaper = kvEditorialDeliveryNewMagazing;
+  editorialInf->registeNewModule = kvEditorialAddNewSubscrible;
+  editorialInf->removeModule = kvEditorialRemoveSubscriber;
+  editorialInf->update = kvEditorialDeliveryNewMagazing;
 
   return errCode;
 }
 
 Void kvEditorialAddNewSubscrible(Void *newSubcriber)
 {
-  subListAddElementAtLast(subList,(Subscriber_t*)newSubcriber);
+  subListAddElementAtLast(subList,(Module_t*)newSubcriber);
 }
 
 Void kvEditorialRemoveSubscriber(Void *removeSubscriber)
 {
   // Get index of the current subscriber
   UInt32 index = 0;
-  index = subListIndexof(subList,(Subscriber_t *)removeSubscriber);
+  index = subListIndexof(subList,(Module_t *)removeSubscriber);
   // Remove the subscriber based the index
   subListRemoveElementBasedIndex(&subList,index);
 }
@@ -224,12 +224,12 @@ Void kvEditorialRemoveSubscriber(Void *removeSubscriber)
 
 Void kvEditorialDeliveryNewMagazing(Void *object)
 {
-  SubscriberList_t *current = subList;
+  ModuleList_t *current = subList;
   Int8 *typeNewspaper;
 
   do
   {
-	if (current->sub->change == SET)
+	if (current->sub->change == UPDATE_SET)
 	{
 		switch (current->sub->subType)
 		{
@@ -249,8 +249,8 @@ Void kvEditorialDeliveryNewMagazing(Void *object)
 			typeNewspaper = "DAILY NEWSPAPER";
 			break;
 		}
-		current->sub->notify(typeNewspaper);
-		current->sub->resetFlag(current->sub);
+		current->sub->update(typeNewspaper);
+		kvModuleResetCHangedFlag(current->sub);
 	}
     current = current->nextSub;
   }while(current != NULL);

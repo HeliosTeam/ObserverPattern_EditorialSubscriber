@@ -5,51 +5,50 @@
  *      Author: KEVIN
  */
 
+#include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
+
 #include "../../kvInclude/kvInclude.h"
 #include "../inc/kvMainApp.h"
-#include "../../kvObserver/inc/kvEditorial.h"
-#include "../../kvObserver/inc/kvSubcriber.h"
+#include "../../kvObserver/inc/kvHost.h"
+#include "../../kvObserver/inc/kvModule.h"
 
-int main() {
 
+
+int main()
+{
 	Int8 c;
-	ThisEditorial_t *thisEditorial = NULL;
-	Subscriber_t *Kevin = NULL;
-	Subscriber_t *Linda = NULL;
-	Subscriber_t *Jean = NULL;
-	Subscriber_t *Petter = NULL;
+	ThistHost_t *thisHost = NULL;
 
-	thisEditorial = (ThisEditorial_t *) malloc(sizeof(ThisEditorial_t));
-	kvEditorialRegisterInterface(thisEditorial);
+	Module_t *proximity =NULL;
 
-	thisEditorial->init(thisEditorial);
+	thisHost = (ThistHost_t *) malloc(sizeof(ThistHost_t));
 
-	kvSubscriberInit(&Kevin, thisEditorial->editorial, DAILY_PAPER);
-	kvSubscriberInit(&Linda, thisEditorial->editorial, WEEK_PAPER);
-	kvSubscriberInit(&Jean, thisEditorial->editorial, MONTH_PAPER);
+	kvHostRegisterInterface(thisHost);
 
-	Kevin->setFlag(Kevin);
-	Linda->setFlag(Linda);
-	Jean->setFlag(Jean);
+	thisHost->init(thisHost);
 
-//  kvSubscriberInit(&Petter,thisEditorial->editorial,YEAR_PAPER);
 
-	while (1) {
-		thisEditorial->editorial->deliverNewSpaper(NULL);
+	kvModuleProximityRegisterInterface(&proximity);
+
+	proximity->init(thisHost->host);
+
+	kvModuleSetChangedFlag(proximity);
+
+	while (1)
+	{
+		thisHost->host->update(NULL);
+
 		printf("\r\nPress Any Key to Continue\n");
 		c = getchar();
 		if (c == 'n') {
-			Kevin->setFlag(Kevin);
-			Linda->setFlag(Linda);
-			Jean->setFlag(Jean);
+			kvModuleSetChangedFlag(proximity);
 		}
 
-		if (c == 't') {
-			Kevin->setFlag(Kevin);
-			Linda->setFlag(Linda);
+		if (c == 't')
+		{
 		}
-
 	}
 	return 1;
 }
